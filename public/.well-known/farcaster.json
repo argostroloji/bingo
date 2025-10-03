@@ -1,0 +1,15 @@
+{
+  "accountAssociation": {
+    "header": "eyJmaWQiOjEsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIn0",
+    "payload": "eyJkb21haW4iOiJleGFtcGxlLmNvbSJ9",
+    "signature": "MHg..."
+  },
+  "frame": {
+    "version": "next",
+    "name": "Web3 Bingo",
+    "iconUrl": "/assets/generated_images/Web3_bingo_hero_background_616bbb59.png",
+    "splashImageUrl": "/assets/generated_images/Web3_bingo_hero_background_616bbb59.png",
+    "splashBackgroundColor": "#1a1625",
+    "homeUrl": "/"
+  }
+}
