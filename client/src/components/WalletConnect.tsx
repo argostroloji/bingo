@@ -2,28 +2,39 @@ import { Wallet, Check } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { useState } from "react";
+import { useFarcaster } from "@/lib/farcaster";
 
 interface WalletConnectProps {
   onConnect?: (address: string, network: string) => void;
 }
 
 export default function WalletConnect({ onConnect }: WalletConnectProps) {
+  const { context } = useFarcaster();
   const [baseConnected, setBaseConnected] = useState(false);
   const [monadConnected, setMonadConnected] = useState(false);
   const [walletAddress, setWalletAddress] = useState("");
 
-  const handleConnect = (network: "base" | "monad") => {
-    const mockAddress = "0x" + Math.random().toString(16).substring(2, 10);
-    setWalletAddress(mockAddress);
+  const handleConnect = async (network: "base" | "monad") => {
+    let address = "";
+    
+    if (context?.user?.connectedAddress) {
+      address = context.user.connectedAddress;
+    } else {
+      address = "0x" + Math.random().toString(16).substring(2, 10);
+    }
+    
+    setWalletAddress(address);
     
     if (network === "base") {
       setBaseConnected(true);
-      onConnect?.(mockAddress, "base");
+      onConnect?.(address, "base");
     } else {
       setMonadConnected(true);
-      onConnect?.(mockAddress, "monad");
+      onConnect?.(address, "monad");
     }
   };
+
+  const displayAddress = walletAddress || context?.user?.connectedAddress;
 
   return (
     <div className="space-y-3">
@@ -69,11 +80,16 @@ export default function WalletConnect({ onConnect }: WalletConnectProps) {
         </Button>
       </div>
 
-      {(baseConnected || monadConnected) && walletAddress && (
+      {displayAddress && (
         <div className="flex items-center gap-2">
           <Badge variant="outline" className="font-mono text-xs" data-testid="text-wallet-address">
-            {walletAddress.slice(0, 6)}...{walletAddress.slice(-4)}
+            {displayAddress.slice(0, 6)}...{displayAddress.slice(-4)}
           </Badge>
+          {context?.user?.fid && (
+            <Badge variant="secondary" className="text-xs">
+              FID: {context.user.fid}
+            </Badge>
+          )}
           {baseConnected && (
             <Badge variant="secondary" className="text-xs">
               Base
