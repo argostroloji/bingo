@@ -1,15 +1,15 @@
 {
   "accountAssociation": {
     "header": "eyJmaWQiOjEsInR5cGUiOiJjdXN0b2R5Iiwia2V5IjoiMHgwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwMDAwIn0",
-    "payload": "eyJkb21haW4iOiJleGFtcGxlLmNvbSJ9",
-    "signature": "MHg..."
+    "payload": "eyJkb21haW4iOiJyZXBsaXQuYXBwIn0",
+    "signature": "MHhkZXZlbG9wbWVudF9zaWduYXR1cmU="
   },
   "frame": {
     "version": "next",
-    "name": "Web3 Bingo",
-    "iconUrl": "/assets/generated_images/Web3_bingo_hero_background_616bbb59.png",
-    "splashImageUrl": "/assets/generated_images/Web3_bingo_hero_background_616bbb59.png",
+    "name": "Web3 Bingo - Play on Base & Monad",
+    "iconUrl": "https://web3-bingo.replit.app/assets/generated_images/Web3_bingo_hero_background_616bbb59.png",
+    "splashImageUrl": "https://web3-bingo.replit.app/assets/generated_images/Web3_bingo_hero_background_616bbb59.png",
     "splashBackgroundColor": "#1a1625",
-    "homeUrl": "/"
+    "homeUrl": "https://web3-bingo.replit.app/"
   }
 }
