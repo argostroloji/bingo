@@ -4,8 +4,17 @@ import { WebSocketServer, WebSocket } from "ws";
 import { storage } from "./storage";
 import { insertUserProfileSchema, insertTicketSchema } from "@shared/schema";
 import { z } from "zod";
+import { startDrawScheduler } from "./scheduler";
 
 const broadcastClients = new Set<WebSocket>();
+
+function broadcastToClients(message: any) {
+  broadcastClients.forEach(client => {
+    if (client.readyState === WebSocket.OPEN) {
+      client.send(JSON.stringify(message));
+    }
+  });
+}
 
 export async function registerRoutes(app: Express): Promise<Server> {
   
@@ -152,15 +161,11 @@ export async function registerRoutes(app: Express): Promise<Server> {
       await storage.addDrawnNumber(roundId, number);
       const round = await storage.getRound(roundId);
       
-      broadcastClients.forEach(client => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({
-            type: 'number_drawn',
-            roundId,
-            number,
-            drawnNumbers: round?.drawnNumbers || []
-          }));
-        }
+      broadcastToClients({
+        type: 'number_drawn',
+        roundId,
+        number,
+        drawnNumbers: round?.drawnNumbers || []
       });
       
       res.json(round);
@@ -174,13 +179,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       const { roundId } = req.params;
       await storage.completeRound(roundId);
       
-      broadcastClients.forEach(client => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(JSON.stringify({
-            type: 'round_complete',
-            roundId
-          }));
-        }
+      broadcastToClients({
+        type: 'round_complete',
+        roundId
       });
       
       res.json({ success: true });
@@ -219,6 +220,9 @@ export async function registerRoutes(app: Express): Promise<Server> {
       broadcastClients.delete(ws);
     });
   });
+
+  // Start automated draw scheduler
+  startDrawScheduler(broadcastToClients);
 
   return httpServer;
 }
